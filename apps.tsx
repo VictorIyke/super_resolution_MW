@@ -21,8 +21,6 @@ export default function App() {
         }}>
         <Root.Screen name='Super_Resolution' component={screens.d}/>
         <Root.Screen name='Screen1' component={screens.a}/>
-        <Root.Screen name='Screen2' component={screens.b}/>
-        <Root.Screen name='Screen3' component={screens.c}/>
       </Root.Navigator>
     </NavigationContainer>
   )
