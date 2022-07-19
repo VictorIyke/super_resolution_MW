@@ -3,13 +3,11 @@ import React, {useState} from 'react';
 import { Alert, Button, StyleSheet, Text, View, NativeModules, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackScreenProps } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import screens, {RootParamList} from "./screens/screens"
 import * as ort from 'onnxruntime-react-native';
 import { Asset } from 'expo-asset';
-import { pixelsRGBToYCbCr, pixelsYCbCrToRGB } from './pixelator';
+import { pixelsRGBToYCbCr, pixelsYCbCrToRGB } from '../misc/utilities';
+import { RootParamList } from './NavigStack'
 
 
 let model: ort.InferenceSession;
@@ -25,7 +23,7 @@ let bitmapScaledPixel: number[] = Array(imgHeight*imgWidth);
 const bitmapModule = NativeModules.Bitmap
 type Screen4Props = StackScreenProps<RootParamList, "Super_Resolution">
 
-export default function App({navigation, route}: Screen4Props ) {
+export default function SuperRes({navigation, route}: Screen4Props ) {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [outputImage, setOutputImage] = useState<any>(null);
   const [myModel, setModel] = useState(model);
@@ -125,7 +123,7 @@ export default function App({navigation, route}: Screen4Props ) {
 
   async function loadModel() {
     try {
-      const assets = await Asset.loadAsync(require('./assets/super_resnet12.ort'));
+      const assets = await Asset.loadAsync(require('../assets/super_resnet12.ort'));
       const modelUri = assets[0].localUri;
       if (!modelUri) {
         Alert.alert('failed to get model URI', `${assets[0]}`);

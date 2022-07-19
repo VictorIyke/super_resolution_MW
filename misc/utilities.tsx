@@ -3,8 +3,6 @@ export function pixelsRGBToYCbCr(pixel: number, mode: string): number {
     const green = (pixel >> 8 & 0xFF)
     const blue = (pixel & 0xFF)
 
-
-
     let result = 0
     if (mode == "y") {
         result  = (0.299 * red +
