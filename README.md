@@ -1,4 +1,4 @@
-# Super-Resolution for Mobile and Web using ONNX Runtime
+# Super-Resolution Implementation for Mobile and Web using ONNX Runtime
 
 Implementing Super Resolution functions on Images using ONNX Runtime
 
