@@ -18,8 +18,8 @@ const [postImgHeight, postImgWidth] = [imgHeight*3, imgWidth*3]
 
 
 let floatPixelsY = new Float32Array()
-let floatPixelsCb = new Float32Array()
-let floatPixelsCr = new Float32Array()
+let cbArray = new Array<number>()
+let crArray = new Array<number>()
 
 let bitmapPixel: number[] = Array(imgHeight*imgWidth);
 let bitmapScaledPixel: number[] = Array(postImgHeight*postImgWidth);
@@ -88,8 +88,8 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
 
   async function preprocess(): Promise<ort.Tensor> {  
     floatPixelsY = Float32Array.from(bitmapPixel)
-    floatPixelsCb = Float32Array.from(bitmapScaledPixel)
-    floatPixelsCr = Float32Array.from(bitmapScaledPixel)
+    cbArray = Array.from(bitmapScaledPixel)
+    crArray = Array.from(bitmapScaledPixel)
 
     bitmapPixel.forEach((value, index) => {
 
@@ -97,20 +97,19 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
     });
 
     bitmapScaledPixel.forEach((value, index) => {
-      floatPixelsCb[index] = pixelsRGBToYCbCr(value, "cb")
-      floatPixelsCr[index] = pixelsRGBToYCbCr(value, "cr")
+      cbArray[index] = pixelsRGBToYCbCr(value, "cb")
+      crArray[index] = pixelsRGBToYCbCr(value, "cr")
     })
     let tensor: ort.Tensor = new ort.Tensor(floatPixelsY, [1, 1, imgHeight, imgWidth])
     return tensor
   };
-
 
   async function postprocess(floatArray: Array<number>): Promise<string> {  
     const intArray = Array(postImgHeight*postImgWidth);
 
 
     floatArray.forEach((value, index) => {
-      intArray[index] = pixelsYCbCrToRGB(value, floatPixelsCb[index], floatPixelsCr[index])
+      intArray[index] = pixelsYCbCrToRGB(value, cbArray[index], crArray[index])
     })
 
 
