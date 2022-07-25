@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { Alert, Button, StyleSheet, Text, View, NativeModules, Image, ScrollView, ToastAndroid, Platform } from 'react-native';
+import { Alert, Button, Text, View, NativeModules, Image, ScrollView, ToastAndroid } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { StackScreenProps } from '@react-navigation/stack';
 import * as ort from 'onnxruntime-react-native';
 import { Asset } from 'expo-asset';
 import { pixelsRGBToYCbCr, pixelsYCbCrToRGB } from '../misc/utilities';
-import { RootParamList } from './NavigStack'
+import { RootParamList } from './NavigStack';
+import { styles } from '../misc/styles';
 
 
 let model: ort.InferenceSession;
@@ -213,37 +214,6 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
 };
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffb703',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-  },
-  scrollView: {
-    backgroundColor: "#e9c46a",
-    padding: 4,
-  },
-  item: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  thumbnail: {
-    alignSelf: "center",
-    margin: 8,
-    width: 400,
-    height: 400,
-    resizeMode: "contain"
-  },
-  userInput: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 16,
-    alignItems: "center",
-    backgroundColor: "#111111"
-  },
-});
+
 
 
