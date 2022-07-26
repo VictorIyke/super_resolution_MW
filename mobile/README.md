@@ -21,7 +21,7 @@
        cd <SOURCE_ROOT>
        npm install --force
        ```
-       This command installs the node modules and libraries relevant to the project into your SOURCE ROOT. The modules are specified in the package.json file.
+       This command installs the node modules and libraries relevant to the project into your SOURCE ROOT. The modules to be installed are specified in the package.json file.
        
        **NOTE:**
        - `<SOURCE_ROOT>` refers to the root folder of the Created Directory.
