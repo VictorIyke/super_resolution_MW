@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
 
-  container: {
+  containerAndroid: {
       flex: 1,
       backgroundColor: '#ffb703',
       alignItems: 'stretch',

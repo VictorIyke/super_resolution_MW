@@ -201,6 +201,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
         <Button
         title="Pick a photo <3"
         onPress={openImagePickerAsync}
+        color="#118ab2"
         />
 
       </TouchableOpacity>
@@ -208,6 +209,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
       <Button
         title='Run Model'
         onPress={runModel}
+        color="#118ab2"
         />
 
     </View>

@@ -21,7 +21,7 @@ export default function App() {
         initialRouteName='WelcomeScreen'
         screenOptions={{
             headerTintColor: 'white',
-            headerStyle: { backgroundColor: 'tomato' },
+            headerStyle: { backgroundColor: '#118ab2' },
         }}>
         <Root.Screen name='WelcomeScreen' component={screens.first}/>
         <Root.Screen name='MainScreen' component={screens.second}/>
