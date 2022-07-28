@@ -1,12 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
 import screens from "./screens"
 
 
 export type RootParamList = {
   WelcomeScreen: undefined
-  Super_Resolution: undefined
+  MainScreen: undefined
 }
+
+export type MainScreenProps = StackScreenProps<RootParamList, "MainScreen", "1">
+
 
 const Root = createNativeStackNavigator<RootParamList>();
 
@@ -20,7 +24,7 @@ export default function App() {
             headerStyle: { backgroundColor: 'tomato' },
         }}>
         <Root.Screen name='WelcomeScreen' component={screens.first}/>
-        <Root.Screen name='Super_Resolution' component={screens.second}/>
+        <Root.Screen name='MainScreen' component={screens.second}/>
       </Root.Navigator>
     </NavigationContainer>
   )

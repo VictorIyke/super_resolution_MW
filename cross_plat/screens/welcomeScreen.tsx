@@ -1,8 +1,8 @@
 import { View, Text, Button, Alert } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootParamList } from './NavigStack'
 import { styles } from '../misc/styles';
-
 
   
 type WelcomeScreenProps = StackScreenProps<RootParamList, 'WelcomeScreen', "0">
@@ -13,19 +13,19 @@ export default function WelcomeScreen({ navigation, route }: WelcomeScreenProps)
           <Text style = { styles.welcomeText }>
             Hello There!!! Welcome to the Super-Resolution App</Text>
           <View style= {styles.userInput}>
-              <Button 
-                  title='Go to Screen 2'
-                  onPress={() => {navigation.push('Super_Resolution')}}
+              <Button color="#219ebc"
+                  title='Go to Main Screen'
+                  onPress={() => {navigation.push('MainScreen')}}
               />
       
-              <Button
+              <Button color="#219ebc"
                   title='Go Back'
                   onPress={() => {
                     if (navigation.canGoBack()) navigation.pop()
                     else Alert.alert("No More Screens", "There is no screen to go back to");
                   }}
               />
-              <Button
+              <Button color="#219ebc"
                   title='Go to Home'
                   onPress={() => {
                     if (navigation.canGoBack()) navigation.popToTop()
@@ -33,6 +33,7 @@ export default function WelcomeScreen({ navigation, route }: WelcomeScreenProps)
                   }}
                   />
           </View>
+          <StatusBar style="auto" />
       </View>
     )
   }

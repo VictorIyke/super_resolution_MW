@@ -9,7 +9,6 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.12.1",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/drawer": "^6.4.3",
     "@react-navigation/native": "^6.0.11",

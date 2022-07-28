@@ -1,11 +1,18 @@
 import WelcomeScreen from './welcomeScreen';
-import SuperRes from './SuperRes';
+import AndroidApp from './SuperRes';
+import WebApp from './web';
+import { Platform } from 'react-native';
 
 
 const screens = {
     first : WelcomeScreen,
-    second : SuperRes,
+    second : AndroidApp,
 }
+
+if (Platform.OS == "web") {
+    screens.second = WebApp
+}
+
 
 export default screens
   

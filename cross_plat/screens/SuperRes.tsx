@@ -1,33 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { Alert, Button, Text, View, NativeModules, Image, ScrollView, ToastAndroid } from 'react-native';
+import { Alert, Button, Text, View, NativeModules, Image, ScrollView, ToastAndroid, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { StackScreenProps } from '@react-navigation/stack';
-import * as ort from 'onnxruntime-react-native';
 import { Asset } from 'expo-asset';
+import { MainScreenProps } from './NavigStack';
 import { pixelsRGBToYCbCr, pixelsYCbCrToRGB } from '../misc/utilities';
-import { RootParamList } from './NavigStack';
 import { styles } from '../misc/styles';
 
 
-let model: ort.InferenceSession;
+let model: any;
+let ort: any
+const platform = Platform.OS
+
+if (platform == "android") {ort = require("onnxruntime-react-native")}
+
 let isLoaded = false;
 const [imgHeight, imgWidth] = [224, 224]
 const [postImgHeight, postImgWidth] = [imgHeight*3, imgWidth*3]
 
 
 let floatPixelsY = new Float32Array()
-let floatPixelsCb = new Float32Array()
-let floatPixelsCr = new Float32Array()
+let cbArray = new Array<number>()
+let crArray = new Array<number>()
 
 let bitmapPixel: number[] = Array(imgHeight*imgWidth);
 let bitmapScaledPixel: number[] = Array(postImgHeight*postImgWidth);
 
 const bitmapModule = NativeModules.Bitmap
-type SuperScreenProps = StackScreenProps<RootParamList, "Super_Resolution">
 
-export default function SuperRes({navigation, route}: SuperScreenProps ) {
+export default function AndroidApp({navigation, route}: MainScreenProps) {
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [outputImage, setOutputImage] = useState<any>(null);
   const [myModel, setModel] = useState(model);
@@ -86,33 +88,40 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
   };
 
 
-  async function preprocess(): Promise<ort.Tensor> {  
+  async function preprocess() {  
+    if (platform =="android") {
     floatPixelsY = Float32Array.from(bitmapPixel)
-    floatPixelsCb = Float32Array.from(bitmapScaledPixel)
-    floatPixelsCr = Float32Array.from(bitmapScaledPixel)
+    cbArray = Array.from(bitmapScaledPixel)
+    crArray = Array.from(bitmapScaledPixel)
 
     bitmapPixel.forEach((value, index) => {
 
-      floatPixelsY[index] = pixelsRGBToYCbCr(value, "y")
+      const red = (value >> 16 & 0xFF)
+      const green = (value >> 8 & 0xFF)
+      const blue = (value & 0xFF)
+      floatPixelsY[index] = pixelsRGBToYCbCr(red, green, blue, "y")
     });
 
     bitmapScaledPixel.forEach((value, index) => {
-      floatPixelsCb[index] = pixelsRGBToYCbCr(value, "cb")
-      floatPixelsCr[index] = pixelsRGBToYCbCr(value, "cr")
+      const red = (value >> 16 & 0xFF)
+      const green = (value >> 8 & 0xFF)
+      const blue = (value & 0xFF)
+      cbArray[index] = pixelsRGBToYCbCr(red, green, blue, "cb")
+      crArray[index] = pixelsRGBToYCbCr(red, green, blue, "cr")
     })
-    let tensor: ort.Tensor = new ort.Tensor(floatPixelsY, [1, 1, imgHeight, imgWidth])
+   
+    let tensor = new ort.Tensor(floatPixelsY, [1, 1, imgHeight, imgWidth])
     return tensor
+  }
   };
 
-
   async function postprocess(floatArray: Array<number>): Promise<string> {  
-    const intArray = Array(postImgHeight*postImgWidth);
+    const intArray = Array<number>(postImgHeight*postImgWidth);
 
 
     floatArray.forEach((value, index) => {
-      intArray[index] = pixelsYCbCrToRGB(value, floatPixelsCb[index], floatPixelsCr[index])
+      intArray[index] = (pixelsYCbCrToRGB(value, cbArray[index], crArray[index], platform) as number[])[0]
     })
-
 
     let imageUri = await bitmapModule.getImageUri(intArray).then(
       (image:any) => {
@@ -132,6 +141,7 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
   
 
   async function loadModel() {
+  
     try {
       const assets = await Asset.loadAsync(require('../assets/super_resnet12.ort'));
       const modelUri = assets[0].localUri;
@@ -147,12 +157,13 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
       Alert.alert('failed to load model', `${e}`);
       throw e;
     }
-  };
+  }
+
 
   async function runModel() {
     try {
       
-      const feeds:Record<string, ort.Tensor> = {};
+      const feeds:Record<any, any> = {};
 
       if (bitmapPixel.length == imgHeight*imgWidth) {
         
@@ -177,7 +188,7 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
     }
   };
 
-  if (!isLoaded) {
+  if (!isLoaded ) {
     loadModel().then(() => {
       isLoaded = true;
     })
@@ -187,13 +198,13 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
   return (
     <View style={styles.container}>
       <Text style={styles.item}>Using ONNX Runtime in React Native to perform Super Resolution on Images</Text>
-      <ScrollView horizontal style= {styles.scrollView}>
-        {
+      {
           selectedImage !== null &&
+      <ScrollView horizontal style= {styles.scrollView}>
           <Image
             source={{ uri: selectedImage.localUri }}
             style={styles.thumbnail}
-          />}
+          />
         {
           outputImage !== null &&
           <Image
@@ -201,7 +212,7 @@ export default function SuperRes({navigation, route}: SuperScreenProps ) {
             style={styles.thumbnail}
           />
         }
-      </ScrollView>
+      </ScrollView>}
       <View style={styles.userInput}>
         <Button title='Upload Image' onPress={openImagePickerAsync} color="#219ebc"/>
         {isLoaded && selectedImage !== null &&

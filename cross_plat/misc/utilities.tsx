@@ -1,7 +1,4 @@
-export function pixelsRGBToYCbCr(pixel: number, mode: string): number {
-    const red = (pixel >> 16 & 0xFF)
-    const green = (pixel >> 8 & 0xFF)
-    const blue = (pixel & 0xFF)
+export function pixelsRGBToYCbCr(red: number, green: number, blue: number, mode: string): number {
 
     let result = 0
     if (mode == "y") {
@@ -25,7 +22,7 @@ export function pixelsRGBToYCbCr(pixel: number, mode: string): number {
     
 }
 
-export function pixelsYCbCrToRGB(pixel: number, cb: number, cr: number): number{
+export function pixelsYCbCrToRGB(pixel: number, cb: number, cr: number, platform: "ios" | "android" | "windows" | "macos" | "web") {
     const y = Math.min(Math.max((pixel * 255), 0), 255);
 
     const red = Math.min(Math.max((y + (1.4025 * (cr-0x80))), 0), 255);
@@ -35,10 +32,20 @@ export function pixelsYCbCrToRGB(pixel: number, cb: number, cr: number): number{
 
     const blue = Math.min(Math.max((y + (1.77200 * (cb-0x80))), 0), 255);
 
-    const intPixel =  ((0xFF << 24) |
-                      ((0xFF & blue) << 16) |
-                      ((0xFF & green) << 8) |
-                      ((0xFF & red)))
+    if (platform == "web") {
+        const pixels = Array.of(red, green, blue)
+        return pixels
 
-    return intPixel
+    }else if (platform == "android") {
+        const intPixel =  Array.of(
+                        ((0xFF << 24) |
+                        ((0xFF & blue) << 16) |
+                        ((0xFF & green) << 8) |
+                        ((0xFF & red)))
+                        )
+
+        return intPixel
+    }else return 0
 }
+
+
