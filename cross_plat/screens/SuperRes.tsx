@@ -89,13 +89,11 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
 
 
   async function preprocess() {  
-    if (platform =="android") {
     floatPixelsY = Float32Array.from(bitmapPixel)
     cbArray = Array.from(bitmapScaledPixel)
     crArray = Array.from(bitmapScaledPixel)
 
     bitmapPixel.forEach((value, index) => {
-
       const red = (value >> 16 & 0xFF)
       const green = (value >> 8 & 0xFF)
       const blue = (value & 0xFF)
@@ -112,12 +110,11 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
    
     let tensor = new ort.Tensor(floatPixelsY, [1, 1, imgHeight, imgWidth])
     return tensor
-  }
   };
+
 
   async function postprocess(floatArray: Array<number>): Promise<string> {  
     const intArray = Array<number>(postImgHeight*postImgWidth);
-
 
     floatArray.forEach((value, index) => {
       intArray[index] = (pixelsYCbCrToRGB(value, cbArray[index], crArray[index], platform) as number[])[0]
@@ -125,7 +122,6 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
 
     let imageUri = await bitmapModule.getImageUri(intArray).then(
       (image:any) => {
-
         return image.uri
       }
     )
@@ -141,16 +137,15 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
   
 
   async function loadModel() {
-  
     try {
       const assets = await Asset.loadAsync(require('../assets/super_resnet12.ort'));
       const modelUri = assets[0].localUri;
+
       if (!modelUri) {
         Alert.alert('failed to get model URI', `${assets[0]}`);
       } else {
         setModel(await ort.InferenceSession.create(modelUri));
         return
-
         }
 
     } catch (e) {
@@ -162,18 +157,18 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
 
   async function runModel() {
     try {
-      
       const feeds:Record<any, any> = {};
 
       if (bitmapPixel.length == imgHeight*imgWidth) {
-        
         feeds[myModel.inputNames[0]] = await preprocess();
       } else{
         Alert.alert("No Image selected", "You need to upload and/or show image")
         return
       }
+
       const fetches = await myModel.run(feeds);
       const output = fetches[myModel.outputNames[0]];
+
       if (!output) {
         Alert.alert('failed to get output', `${myModel.outputNames[0]}`);
       }else {
@@ -182,6 +177,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
         await postprocess(array);
         ToastAndroid.show('SUPER_RESOLUTION DONE\n  SWYPE RIGHT', ToastAndroid.LONG)
       }
+      
     } catch (e) {
       Alert.alert('failed to inference model', `${e}`);
       throw e;
@@ -194,6 +190,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
     })
     
   } 
+
 
   return (
     <View style={styles.container}>
