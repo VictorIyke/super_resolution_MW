@@ -197,7 +197,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
       <Text style={styles.item}>Using ONNX Runtime in React Native to perform Super Resolution on Images</Text>
       {
           selectedImage !== null &&
-      <ScrollView horizontal style= {styles.scrollView}>
+      <ScrollView style= {styles.scrollView}>
           <Image
             source={{ uri: selectedImage.localUri }}
             style={styles.thumbnail}
