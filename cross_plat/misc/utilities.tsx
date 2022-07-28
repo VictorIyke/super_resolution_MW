@@ -45,7 +45,7 @@ export function pixelsYCbCrToRGB(pixel: number, cb: number, cr: number, platform
                         )
 
         return intPixel
-    }else return 0
+    }else return Array(0)
 }
 
 
