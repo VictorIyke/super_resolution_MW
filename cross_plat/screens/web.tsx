@@ -112,70 +112,55 @@ export default function WebApp({navigation, route}: MainScreenProps) {
 
 
   async function postProcess(outputArray: number []) {
-
     outputArray.forEach((value, index) => {
-    const pixel = pixelsYCbCrToRGB(value, cbArray[index], crArray[index], platform) as number[]
-    const currentIndex = index * 4;
-    const data = myImageScaledData.data
-    data[currentIndex] = pixel[0]
-    data[currentIndex + 1] = pixel[1]
-    data[currentIndex + 2] = pixel[2]
 
+      const pixel = pixelsYCbCrToRGB(value, cbArray[index], crArray[index], platform)
+      const currentIndex = index * 4;
+      const data = myImageScaledData.data
 
+      data[currentIndex] = pixel[0]
+      data[currentIndex + 1] = pixel[1]
+      data[currentIndex + 2] = pixel[2]
     })
 
-    kdv?.putImageData(myImageScaledData, 0, 0);
-    kdv?.save();
     const canvas = document.getElementById("canvas") as HTMLCanvasElement
     const ctx = canvas.getContext("2d")
-    if (ctx) {
     
-    ctx.drawImage(offscreen, 0, 0, scaledImageDim, scaledImageDim, 0, 0, 400, 400)
-    ctx.save()
-
+    if (ctx && kdv) {  
+      kdv.putImageData(myImageScaledData, 0, 0);
+      kdv.save();
+      ctx.drawImage(offscreen, 0, 0, scaledImageDim, scaledImageDim, 0, 0, 400, 400)
+      ctx.save()
     }
-
-
   }
 
 
   async function draw() {
-  const image1 = document.getElementById('selectedImage') as HTMLImageElement
-  kdv = offscreen.getContext('2d')
+    const image1 = document.getElementById('selectedImage') as HTMLImageElement
+    kdv = offscreen.getContext('2d')
 
-  if (selectedImage != null && kdv) {
-    console.log("GL loaded")
+    if (kdv) {
+      kdv.drawImage(image1, 0, 0, imageDim, imageDim)
+      const myImageData = kdv.getImageData(0, 0, imageDim, imageDim)
+      bitmapPixel = Array.from(myImageData.data)
+      kdv.clearRect(0, 0, imageDim, imageDim)
 
-
-
-    kdv.drawImage(image1, 0, 0, imageDim, imageDim)
-    const myImageData = kdv.getImageData(0, 0, imageDim, imageDim)
-    bitmapPixel = Array.from(myImageData.data)
-    kdv.clearRect(0, 0, imageDim, imageDim)
-
-
-
-
-    kdv.drawImage(image1, 0, 0, scaledImageDim, scaledImageDim)
-    myImageScaledData = kdv.getImageData(0, 0, scaledImageDim, scaledImageDim)
-    bitmapScaledPixel = Array.from(myImageScaledData.data)
-    kdv.clearRect(0, 0, scaledImageDim, scaledImageDim)
-
+      kdv.drawImage(image1, 0, 0, scaledImageDim, scaledImageDim)
+      myImageScaledData = kdv.getImageData(0, 0, scaledImageDim, scaledImageDim)
+      bitmapScaledPixel = Array.from(myImageScaledData.data)
+      kdv.clearRect(0, 0, scaledImageDim, scaledImageDim)
     }
-  
   }
     
 
   let openImagePickerAsync = async () => {
-    console.log("About to pick an image")
-    const options = {'base64': true}
-
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
       alert("Permission to access camera roll is required!");
     }
-    let pickerResult = await ImagePicker.launchImageLibraryAsync(options);
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
 
     if (pickerResult.cancelled === true) {
       return;
@@ -186,12 +171,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
         {resize: {height: imageDim, width: imageDim}}
       ]
     )
-
-    
-
-    console.log(pickerResult.height, pickerResult.width)
     setSelectedImage({ localUri: imageResult.uri });
-
   };
 
 
