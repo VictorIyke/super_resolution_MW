@@ -175,7 +175,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
         const out = output.data as Float32Array;
         const array = Array.from(out);
         await postprocess(array);
-        ToastAndroid.show('SUPER_RESOLUTION DONE\n  SWYPE RIGHT', ToastAndroid.LONG)
+        ToastAndroid.show('SUPER_RESOLUTION DONE\n  SWYPE DOWN', ToastAndroid.LONG)
       }
       
     } catch (e) {
@@ -183,6 +183,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
       throw e;
     }
   };
+
 
   if (!isLoaded ) {
     loadModel().then(() => {
@@ -197,7 +198,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
       <Text style={styles.item}>Using ONNX Runtime in React Native to perform Super Resolution on Images</Text>
       {
           selectedImage !== null &&
-      <ScrollView horizontal style= {styles.scrollView}>
+      <ScrollView style= {styles.scrollView}>
           <Image
             source={{ uri: selectedImage.localUri }}
             style={styles.thumbnail}
