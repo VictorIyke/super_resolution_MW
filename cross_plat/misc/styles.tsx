@@ -13,6 +13,13 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
   },
 
+  containerWeb: {
+    flex: 1,
+    backgroundColor: '#ffb703',
+    alignItems: 'center',
+    justifyContent: 'center',
+},
+
   imageView: {
     flexDirection: "row", 
     padding: 20, 

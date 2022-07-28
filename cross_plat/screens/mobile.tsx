@@ -193,7 +193,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
 
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerAndroid}>
       <Text style={styles.item}>Using ONNX Runtime in React Native to perform Super Resolution on Images</Text>
       {
           selectedImage !== null &&

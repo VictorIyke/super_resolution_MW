@@ -176,7 +176,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
 
 
   return (
-    <View style={[styles.container, ] }>
+    <View style={[styles.containerWeb, ] }>
       <Text style={styles.instructions}>
         To upload a photo, press the button!
       </Text>

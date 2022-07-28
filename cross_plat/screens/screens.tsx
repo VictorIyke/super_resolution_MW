@@ -1,5 +1,5 @@
 import WelcomeScreen from './welcomeScreen';
-import AndroidApp from './SuperRes';
+import AndroidApp from './mobile';
 import WebApp from './web';
 import { Platform } from 'react-native';
 

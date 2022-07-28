@@ -9,7 +9,7 @@ type WelcomeScreenProps = StackScreenProps<RootParamList, 'WelcomeScreen', "0">
 
 export default function WelcomeScreen({ navigation, route }: WelcomeScreenProps) {
     return ( 
-      <View style={styles.container}>
+      <View style={styles.containerWeb}>
           <Text style = { styles.welcomeText }>
             Hello There! Welcome to the Super-Resolution App</Text>
               <Button color="#118ab2"
