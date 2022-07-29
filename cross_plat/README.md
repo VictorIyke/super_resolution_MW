@@ -23,25 +23,22 @@
 1. Setup project
     1. Create Root Directory
     2. Copy contents of this Repo into created directory
-    3. Run Yarn
-       ```sh
-       cd <SOURCE_ROOT>
-       yarn
-       ```
 
     **NOTE:**
     - `<SOURCE_ROOT>` refers to the root folder of the source code directory.
  
 2. Install required Libraries
    1. Run the following command in `<SOURCE_ROOT>` to install the modules and libraries specified in the package.json file.
-      1. Using NPM:
-         ```sh
-         npm install
-         ```
-      2. Using YARN:
+      1. Using YARN:
          ```sh
          yarn
          ```
+      
+      2. Using NPM:
+         ```sh
+         npm install
+         ```
+
          
      **NOTE:**
      If you run into dependency issues, you can run this instead to install the modules.
