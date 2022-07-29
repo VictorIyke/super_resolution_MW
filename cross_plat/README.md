@@ -34,9 +34,15 @@
  
 2. Install required Libraries
    1. Run the following command in `<SOURCE_ROOT>` to install the modules and libraries specified in the package.json file.
-   ```sh
-   npm install
-   ```
+      1. Using NPM:
+         ```sh
+         npm install
+         ```
+      2. Using YARN:
+         ```sh
+         yarn
+         ```
+         
      **NOTE:**
      If you run into dependency issues, you can run this instead to install the modules.
       ```sh
