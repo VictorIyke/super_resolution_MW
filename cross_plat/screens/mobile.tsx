@@ -43,20 +43,27 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
       return;
     }
 
-    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({allowsEditing: true});
     
     if (pickerResult.cancelled === true) {
       return;
     }
 
+    await imageToPixel(pickerResult.uri)
+
+    return
+  };
+
+
+  async function imageToPixel(uri: string) {
     const imageResult = await ImageManipulator.manipulateAsync(
-      pickerResult.uri, [
+      uri, [
         {resize: {height: imgHeight, width: imgWidth}}
       ]
     )
 
     const imageScaled = await ImageManipulator.manipulateAsync(
-      pickerResult.uri, [
+      uri, [
         {resize: {height: postImgHeight, width: postImgWidth}}
       ]
     )
@@ -75,17 +82,29 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
     )
 
     setSelectedImage({ 
-      localUri: imageResult.uri,
-      localHeight: imageResult.height,
-      localWidth: imageResult.width 
+      localUri: uri,
     });
 
     setOutputImage(null)
+  }
 
-    return
 
+  async function openCameraAsync() {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+  
+    if (permissionResult.granted === false) {
+      alert("Permission to access Camera Roll is Required!");
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchCameraAsync({allowsEditing: true});
     
-  };
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    await imageToPixel(pickerResult.uri)
+  }
 
 
   async function preprocess() {  
@@ -195,6 +214,10 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
   return (
     <View style={styles.containerAndroid}>
       <Text style={styles.item}>Using ONNX Runtime in React Native to perform Super Resolution on Images</Text>
+      <View style={styles.userInput}>
+        <Button title='Upload Image' onPress={openImagePickerAsync} color="#219ebc"/>
+        <Button title='Open Camera' onPress={openCameraAsync} color="#219ebc"/>
+      </View>
       {
           selectedImage !== null &&
       <ScrollView style= {styles.scrollView}>
@@ -210,12 +233,13 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
           />
         }
       </ScrollView>}
+      {isLoaded && selectedImage !== null &&
       <View style={styles.userInput}>
-        <Button title='Upload Image' onPress={openImagePickerAsync} color="#219ebc"/>
-        {isLoaded && selectedImage !== null &&
         <Button title='Process Image' onPress={runModel} color="#219ebc"/>
-        }
       </View>
+      }
+        
+
       <StatusBar style="auto" />
     </View>
   );
