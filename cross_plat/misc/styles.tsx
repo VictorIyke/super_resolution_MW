@@ -48,8 +48,8 @@ export const styles = StyleSheet.create({
   thumbnail: {
     alignSelf: "center",
     margin: 8,
-    width: 400,
-    height: 400,
+    width: 350,
+    height: 350,
     resizeMode: "contain"
   },
 

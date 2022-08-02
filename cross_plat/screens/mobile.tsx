@@ -82,7 +82,7 @@ export default function AndroidApp({navigation, route}: MainScreenProps) {
     )
 
     setSelectedImage({ 
-      localUri: uri,
+      localUri: imageResult.uri,
     });
 
     setOutputImage(null)
