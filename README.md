@@ -11,3 +11,4 @@ The [Open Neural Network Exchange](http://onnx.ai/) (ONNX) is an open standard f
 
 [ONNX Runtime](https://onnxruntime.ai/docs/) is a cross-platform machine-learning model accelerator, with a flexible interface to integrate hardware-specific libraries. ONNX Runtime can be used with models from PyTorch, Tensorflow/Keras, TFLite, scikit-learn, and other frameworks.
 
+#### Main Project: [Cross-Platform Implementation](https://github.com/VictorIyke/super_resolution_MW/tree/main/cross_plat/README.md)
