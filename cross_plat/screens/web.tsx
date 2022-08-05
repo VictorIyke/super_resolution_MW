@@ -40,7 +40,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
   const [myModel, setModel] = useState(model);
 
 
-  if (!isLoaded) {
+  if (!isLoaded || !myModel) {
 
     loadModel().then(() => {
       isLoaded = true;
@@ -129,7 +129,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
     if (ctx && kdv) {  
       kdv.putImageData(myImageScaledData, 0, 0);
       kdv.save();
-      ctx.drawImage(offscreen, 0, 0, scaledImageDim, scaledImageDim, 0, 0, 400, 400)
+      ctx.drawImage(offscreen, 0, 0, scaledImageDim, scaledImageDim, 0, 0, 350, 350)
       ctx.save()
     }
   }
@@ -188,7 +188,7 @@ export default function WebApp({navigation, route}: MainScreenProps) {
       />
           
         {selectedImage != null && 
-          <canvas id='canvas' width="400" height="400">
+          <canvas id='canvas' width="350" height="350">
               
               <img id='selectedImage' src={selectedImage.localUri} width="250" height="250" alt='' />
               
