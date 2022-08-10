@@ -1,4 +1,8 @@
-import { View, Text, Button, Alert } from 'react-native';
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
+
+import { View, Text, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootParamList } from './NavigStack'
